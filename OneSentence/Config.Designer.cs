@@ -34,7 +34,7 @@
             this.But_Position = new System.Windows.Forms.Button();
             this.But_Style = new System.Windows.Forms.Button();
             this.But_Color = new System.Windows.Forms.Button();
-            this.But_BColor = new System.Windows.Forms.Button();
+            this.But_Config = new System.Windows.Forms.Button();
             this.But_OneSentence = new System.Windows.Forms.Button();
             this.But_customize = new System.Windows.Forms.Button();
             this.Fd_Style = new System.Windows.Forms.FontDialog();
@@ -91,17 +91,17 @@
             this.But_Color.UseVisualStyleBackColor = true;
             this.But_Color.Click += new System.EventHandler(this.But_Color_Click);
             // 
-            // But_BColor
+            // But_Config
             // 
-            this.But_BColor.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.But_BColor.Location = new System.Drawing.Point(12, 120);
-            this.But_BColor.Name = "But_BColor";
-            this.But_BColor.Size = new System.Drawing.Size(137, 48);
-            this.But_BColor.TabIndex = 4;
-            this.But_BColor.Text = "调整背景颜色";
-            this.Tt_toolTip.SetToolTip(this.But_BColor, "调整显示字体的阴影颜色");
-            this.But_BColor.UseVisualStyleBackColor = true;
-            this.But_BColor.Click += new System.EventHandler(this.But_BColor_Click);
+            this.But_Config.Font = new System.Drawing.Font("微软雅黑", 10F);
+            this.But_Config.Location = new System.Drawing.Point(155, 120);
+            this.But_Config.Name = "But_Config";
+            this.But_Config.Size = new System.Drawing.Size(137, 48);
+            this.But_Config.TabIndex = 5;
+            this.But_Config.Text = "调整配置文件";
+            this.Tt_toolTip.SetToolTip(this.But_Config, "调整配置文件，需要重启生效！");
+            this.But_Config.UseVisualStyleBackColor = true;
+            this.But_Config.Click += new System.EventHandler(this.But_Config_Click);
             // 
             // But_OneSentence
             // 
@@ -110,7 +110,7 @@
             this.But_OneSentence.Location = new System.Drawing.Point(12, 174);
             this.But_OneSentence.Name = "But_OneSentence";
             this.But_OneSentence.Size = new System.Drawing.Size(137, 48);
-            this.But_OneSentence.TabIndex = 5;
+            this.But_OneSentence.TabIndex = 6;
             this.But_OneSentence.Text = "立刻获取 句子";
             this.Tt_toolTip.SetToolTip(this.But_OneSentence, "立刻获取或更换新的语句");
             this.But_OneSentence.UseVisualStyleBackColor = true;
@@ -123,7 +123,7 @@
             this.But_customize.Location = new System.Drawing.Point(155, 174);
             this.But_customize.Name = "But_customize";
             this.But_customize.Size = new System.Drawing.Size(137, 48);
-            this.But_customize.TabIndex = 6;
+            this.But_customize.TabIndex = 7;
             this.But_customize.Text = "自定义 句子";
             this.Tt_toolTip.SetToolTip(this.But_customize, "自定义的语句，留空则关闭");
             this.But_customize.UseVisualStyleBackColor = true;
@@ -133,11 +133,12 @@
             // 
             this.But_Auto.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.But_Auto.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.But_Auto.Location = new System.Drawing.Point(155, 120);
+            this.But_Auto.Location = new System.Drawing.Point(12, 120);
             this.But_Auto.Name = "But_Auto";
             this.But_Auto.Size = new System.Drawing.Size(137, 48);
-            this.But_Auto.TabIndex = 3;
+            this.But_Auto.TabIndex = 4;
             this.But_Auto.Text = "句子自动换行";
+            this.Tt_toolTip.SetToolTip(this.But_Auto, "话语自动换行");
             this.But_Auto.UseVisualStyleBackColor = true;
             this.But_Auto.Click += new System.EventHandler(this.But_Auto_Click);
             // 
@@ -148,7 +149,7 @@
             this.ClientSize = new System.Drawing.Size(304, 236);
             this.Controls.Add(this.But_customize);
             this.Controls.Add(this.But_OneSentence);
-            this.Controls.Add(this.But_BColor);
+            this.Controls.Add(this.But_Config);
             this.Controls.Add(this.But_Auto);
             this.Controls.Add(this.But_Color);
             this.Controls.Add(this.But_Style);
@@ -157,9 +158,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(320, 275);
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(320, 275);
             this.Name = "Config";
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "程序配置";
             this.ResumeLayout(false);
@@ -172,7 +173,7 @@
         private System.Windows.Forms.Button But_Position;
         private System.Windows.Forms.Button But_Style;
         private System.Windows.Forms.Button But_Color;
-        private System.Windows.Forms.Button But_BColor;
+        private System.Windows.Forms.Button But_Config;
         private System.Windows.Forms.Button But_OneSentence;
         private System.Windows.Forms.Button But_customize;
         private System.Windows.Forms.FontDialog Fd_Style;

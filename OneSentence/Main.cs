@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -9,11 +10,21 @@ namespace OneSentence
 {
     public partial class Main : Form
     {
+        #region 窗体事件
+
+        /// <summary>
+        /// 窗体入口函数
+        /// </summary>
         public Main()
         {
             InitializeComponent();
         }
 
+        #region 窗体加载完成时
+
+        /// <summary>
+        /// 窗体加载完成时
+        /// </summary>
         private void Main_Load(object sender, EventArgs e)
         {
             #region 载入配置
@@ -79,6 +90,12 @@ namespace OneSentence
                         Txt_hitokoto.Font = new System.Drawing.Font(Convert.ToString(Config.Split('|')[0]), (float)Convert.ToDecimal(Config.Split('|')[1]), System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 134);
                         //字体颜色
                         Txt_hitokoto.ForeColor = System.Drawing.Color.FromArgb(Convert.ToInt32(Config.Split('|')[2].Split(',')[0]), Convert.ToInt32(Config.Split('|')[2].Split(',')[1]), Convert.ToInt32(Config.Split('|')[2].Split(',')[2]));
+                        //背景颜色
+                        Color color = Color.FromArgb(
+                            Txt_hitokoto.ForeColor.R + (Txt_hitokoto.ForeColor.R >= 250 ? -5 : Txt_hitokoto.ForeColor.R < 5 ? 5 : 0),
+                            Txt_hitokoto.ForeColor.G + (Txt_hitokoto.ForeColor.G >= 250 ? -5 : Txt_hitokoto.ForeColor.G < 5 ? 5 : 0),
+                            Txt_hitokoto.ForeColor.B + (Txt_hitokoto.ForeColor.B >= 250 ? -5 : Txt_hitokoto.ForeColor.B < 5 ? 5 : 0));
+                        SetLayered(color);//设置透明并且实现击穿效果
                     }
                 }
             }
@@ -93,6 +110,13 @@ namespace OneSentence
             GetOneSentence();
         }
 
+        #endregion 窗体加载完成时
+
+        #region 程序退出前操作
+
+        /// <summary>
+        /// 程序退出前操作
+        /// </summary>
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             #region 载出配置
@@ -112,30 +136,24 @@ namespace OneSentence
             #endregion 载出配置
         }
 
-        /// <summary>
-        /// 单击复制文本
-        /// </summary>
-        private void Txt_hitokoto_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetDataObject(Txt_hitokoto.Text);
-        }
+        #endregion 程序退出前操作
 
-        /// <summary>
-        /// 双击立刻获取
-        /// </summary>
-        private void Txt_hitokoto_DoubleClick(object sender, EventArgs e)
-        {
-            GetOneSentence();
-        }
+        #region 配置程序
 
         /// <summary>
         /// 配置程序
         /// </summary>
         private void Tsm_Config_Click(object sender, EventArgs e)
         {
-            Config config = new Config(this);
+            Config config = (Config)Cms_Menu.Tag;
+            if (config == null) Cms_Menu.Tag = config = new Config(this);
+            else if (config.IsDisposed) Cms_Menu.Tag = config = new Config(this);
             config.Show();
         }
+
+        #endregion 配置程序
+
+        #region 退出程序
 
         /// <summary>
         /// 退出程序
@@ -145,6 +163,10 @@ namespace OneSentence
             Application.Exit();
         }
 
+        #endregion 退出程序
+
+        #region 计时器定时刷新
+
         /// <summary>
         /// 计时器定时刷新
         /// </summary>
@@ -153,38 +175,84 @@ namespace OneSentence
             GetOneSentence();
         }
 
+        #endregion 计时器定时刷新
+
+        #endregion 窗体事件
+
+        #region 鼠标事件
+
+        #region 单击复制文本
+
+        /// <summary>
+        /// 单击复制文本
+        /// </summary>
+        private void Txt_hitokoto_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(Txt_hitokoto.Text);
+        }
+
+        #endregion 单击复制文本
+
+        #region 双击立刻获取
+
+        /// <summary>
+        /// 双击立刻获取
+        /// </summary>
+        private void Txt_hitokoto_DoubleClick(object sender, EventArgs e)
+        {
+            GetOneSentence();
+        }
+
+        #endregion 双击立刻获取
+
+        #endregion 鼠标事件
+
+        #region 获取一言
+
         /// <summary>
         /// 获取一言
         /// </summary>
         public void GetOneSentence()
         {
-            string OneSentence = "";
+            int oneSentenceCount = 0;
+            string oneSentence = "";
             do
             {
+                oneSentenceCount++;//重复次数
+                if (oneSentenceCount > 10)
+                {
+                    MessageBox.Show("已超出限定的错误次数");
+                    break;
+                }
                 if (!File.Exists("OneSentence.ini"))
                 {
-                    OneSentence = HttpGet(Convert.ToString(this.Tag));
+                    oneSentence = HttpGet(Convert.ToString(this.Tag));
                 }
                 else
                 {
-                    string[] OneSentenceS = File.ReadAllLines("OneSentence.ini");
-                    if (OneSentenceS.Length == 0) File.Delete("OneSentence.ini");
-                    else OneSentence = OneSentenceS[new Random().Next(OneSentenceS.Length - 1)];
+                    string[] oneSentenceS = File.ReadAllLines("OneSentence.ini");
+                    if (oneSentenceS.Length == 0) File.Delete("OneSentence.ini");
+                    else oneSentence = oneSentenceS[new Random().Next(oneSentenceS.Length - 1)];
                 }
-            } while (OneSentence.Length > Convert.ToInt32(Txt_hitokoto.Tag) || OneSentence.Length == 0);
+            } while (oneSentence.Length > Convert.ToInt32(Txt_hitokoto.Tag) || oneSentence.Length == 0);
 
             if (Txt_hitokoto.AutoSize)
             {
                 //==》调整窗体的参数，保持能显示完整和居中效果
                 int thisWidth = this.Width;
-                this.Width = OneSentence.Length * 37;//37大约为每个字体的宽度
+                this.Width = oneSentence.Length * 37;//37大约为每个字体的宽度
                 this.Height = 75;//还原默认高度
+                if (this.FormBorderStyle == System.Windows.Forms.FormBorderStyle.Sizable) this.Height += 35;
                 //this.Location = new Point(this.Location.X + thisWidth / 2 - this.Width / 2, this.Location.Y);
                 //==》调整窗体的参数，保持能显示完整和居中效果
             }
 
-            Txt_hitokoto.Text = OneSentence;
+            Txt_hitokoto.Text = oneSentence;
         }
+
+        #endregion 获取一言
+
+        #region 网络请求
 
         /// <summary>
         /// 请求路径
@@ -210,5 +278,55 @@ namespace OneSentence
                 return e.Message;
             }
         }
+
+        #endregion 网络请求
+
+        #region 设置透明并且实现击穿效果
+
+        /// <summary>
+        /// 透明方式
+        /// </summary>
+        private const int LWA_COLORKEY = 1;
+
+        /// <summary>
+        /// 设置透明并且实现击穿效果
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <param name="crKey">整数型的颜色值</param>
+        /// <param name="bAlpha"></param>
+        /// <param name="dwFlags"></param>
+        /// <returns></returns>
+        [DllImport("user32", EntryPoint = "SetLayeredWindowAttributes")]
+        private static extern int SetLayeredWindowAttributes(IntPtr hwnd, int crKey, int bAlpha, int dwFlags);
+
+        /// <summary>
+        /// 设置透明并且实现击穿效果
+        /// </summary>
+        public void SetLayered(Color color)
+        {
+            color = color.R >= color.B ? Color.FromArgb(color.B, color.G, color.B) : Color.FromArgb(color.R, color.G, color.R);
+            string color16 = color.Name.Substring(2, 6);
+            int colorInt = Convert.ToInt32(color16, 16);
+            this.TransparencyKey = this.BackColor = color;
+            SetLayeredWindowAttributes(this.Handle, colorInt, 255, LWA_COLORKEY);
+        }
+
+        #endregion 设置透明并且实现击穿效果
+
+        #region 隐藏切换键中的窗体
+
+        public static int WS_EX_TOOLWINDOW = 0x00000080;
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams createParams = base.CreateParams;
+                createParams.ExStyle |= (int)WS_EX_TOOLWINDOW;
+                return createParams;
+            }
+        }
+
+        #endregion 隐藏切换键中的窗体
     }
 }
