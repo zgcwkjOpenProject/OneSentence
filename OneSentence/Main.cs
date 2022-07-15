@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
+using System.Net;
+using System.Text;
 using System.Windows.Forms;
 
 namespace OneSentence
@@ -13,64 +16,139 @@ namespace OneSentence
 
         private void Main_Load(object sender, EventArgs e)
         {
-            string hitokoto = "";
-            do
+            #region 载入配置
+
+            Txt_hitokoto.Tag = 20;//默认必须要有数据
+
+            try
             {
-                hitokoto = OneSentence.Http.HttpGet("https://v1.hitokoto.cn/?encode=text");
-            } while (hitokoto.Length > 15);
+                if (File.Exists("Config.ini"))
+                {
+                    string[] ConfigS = File.ReadAllLines("Config.ini");
+                    if (ConfigS[0].Contains("是否置顶"))
+                    {
+                        string Config = ConfigS[0].Replace("是否置顶=", "");
 
-            int thisWidth = this.Width;
-            this.Width = hitokoto.Length * 37;
-            this.Location = new Point(this.Location.X + thisWidth / 2 - this.Width / 2, this.Location.Y);
+                        this.TopMost = Convert.ToBoolean(Config);
+                    }
+                    if (ConfigS[1].Contains("窗体位置"))
+                    {
+                        string Config = ConfigS[1].Replace("窗体位置=", "");
 
-            Txt_hitokoto.Text = hitokoto;
+                        this.Location = new Point(Convert.ToInt32(Config.Split(',')[0]), Convert.ToInt32(Config.Split(',')[1]));
+                    }
+                    if (ConfigS[2].Contains("字符长度"))
+                    {
+                        string Config = ConfigS[2].Replace("字符长度=", "");
+
+                        Txt_hitokoto.Tag = Convert.ToInt32(Config);
+                    }
+                    if (ConfigS[3].Contains("定时更换"))
+                    {
+                        string Config = ConfigS[3].Replace("定时更换=", "");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "警告");
+            }
+
+            #endregion 载入配置
+
+            GetOneSentence();
         }
 
-        private void Main_KeyDown(object sender, KeyEventArgs e)
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.KeyCode == Keys.F1)
+            #region 载出配置
+
+            string Config = "";
+            Config += "是否置顶=" + this.TopMost;
+            Config += "\r\n" + "窗体位置=" + this.Location.X + "," + this.Location.Y;
+            Config += "\r\n" + "字符长度=" + Txt_hitokoto.Tag;
+            Config += "\r\n" + "定时更换=False";
+            File.WriteAllText("Config.ini", Config, Encoding.UTF8);
+
+            #endregion 载出配置
+        }
+
+        /// <summary>
+        /// 单击复制文本
+        /// </summary>
+        private void Txt_hitokoto_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(Txt_hitokoto.Text);
+        }
+
+        /// <summary>
+        /// 配置程序
+        /// </summary>
+        private void Tsm_Config_Click(object sender, EventArgs e)
+        {
+            Config config = new Config(this);
+            config.Show();
+        }
+
+        /// <summary>
+        /// 退出程序
+        /// </summary>
+        private void Tsm_Close_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        /// <summary>
+        /// 获取一言
+        /// </summary>
+        public void GetOneSentence()
+        {
+            string OneSentence = "";
+            do
             {
-                MessageBox.Show("F2启动或关闭置顶\r\nF3调整窗体位置\r\nF4调整文本样式\r\nF5调整文本颜色\r\nF6调整背景颜色", "帮助");
-            }
-            if (e.KeyCode == Keys.F2)
-            {
-                this.TopMost = !this.TopMost;
-            }
-            if (e.KeyCode == Keys.F3)
-            {
-                if (this.FormBorderStyle == System.Windows.Forms.FormBorderStyle.Sizable)
+                if (!File.Exists("OneSentence.ini"))
                 {
-                    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-                    this.TransparencyKey = System.Drawing.Color.Gray;
-                    this.BackColor = System.Drawing.Color.Gray;
+                    OneSentence = HttpGet("https://v1.hitokoto.cn/?encode=text");
                 }
                 else
                 {
-                    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-                    this.TransparencyKey = System.Drawing.Color.Transparent;
+                    string[] OneSentenceS = File.ReadAllLines("OneSentence.ini");
+                    if (OneSentenceS.Length == 0) File.Delete("OneSentence.ini");
+                    else OneSentence = OneSentenceS[new Random().Next(OneSentenceS.Length - 1)];
                 }
-            }
-            if (e.KeyCode == Keys.F4)
-            {
-                this.Fd_Style.Font = Txt_hitokoto.Font;
+            } while (OneSentence.Length > Convert.ToInt32(Txt_hitokoto.Tag));
 
-                this.Fd_Style.ShowDialog();
-                Txt_hitokoto.Font = this.Fd_Style.Font;
-            }
-            if (e.KeyCode == Keys.F5)
-            {
-                this.Cd_color.Color = Txt_hitokoto.ForeColor;
+            //==》调整窗体的参数，保持能显示完整和居中效果
+            int thisWidth = this.Width;
+            this.Width = OneSentence.Length * 37;//37大约为每个字体的宽度
+            //this.Location = new Point(this.Location.X + thisWidth / 2 - this.Width / 2, this.Location.Y);
+            //==》调整窗体的参数，保持能显示完整和居中效果
 
-                this.Cd_color.ShowDialog();
-                Txt_hitokoto.ForeColor = this.Cd_color.Color;
-            }
-            if (e.KeyCode == Keys.F6)
-            {
-                this.Cd_color.Color = this.BackColor;
+            Txt_hitokoto.Text = OneSentence;
+        }
 
-                this.Cd_color.ShowDialog();
-                this.BackColor = this.Cd_color.Color;
-                this.TransparencyKey = this.Cd_color.Color;
+        /// <summary>
+        /// 请求路径
+        /// </summary>
+        /// <param name="Url">请求的路径</param>
+        /// <returns>返回结果</returns>
+        public string HttpGet(string Url)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
+            request.ContentType = "text/html;charset=UTF-8";
+            request.Method = "GET";
+
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                StreamReader myStreamReader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                string retString = myStreamReader.ReadToEnd();
+                myStreamReader.Close();
+                return retString;
+            }
+            catch (Exception e)
+            {
+                return e.Message;
             }
         }
     }
