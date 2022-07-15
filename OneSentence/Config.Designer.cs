@@ -40,6 +40,7 @@
             this.Fd_Style = new System.Windows.Forms.FontDialog();
             this.Cd_Color = new System.Windows.Forms.ColorDialog();
             this.Tt_toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.But_Auto = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // But_TopMost
@@ -110,7 +111,7 @@
             this.But_OneSentence.Name = "But_OneSentence";
             this.But_OneSentence.Size = new System.Drawing.Size(137, 48);
             this.But_OneSentence.TabIndex = 5;
-            this.But_OneSentence.Text = "立刻获取 一言";
+            this.But_OneSentence.Text = "立刻获取 句子";
             this.Tt_toolTip.SetToolTip(this.But_OneSentence, "立刻获取或更换新的语句");
             this.But_OneSentence.UseVisualStyleBackColor = true;
             this.But_OneSentence.Click += new System.EventHandler(this.But_OneSentence_Click);
@@ -123,10 +124,22 @@
             this.But_customize.Name = "But_customize";
             this.But_customize.Size = new System.Drawing.Size(137, 48);
             this.But_customize.TabIndex = 6;
-            this.But_customize.Text = "自定义 一言";
+            this.But_customize.Text = "自定义 句子";
             this.Tt_toolTip.SetToolTip(this.But_customize, "自定义的语句，留空则关闭");
             this.But_customize.UseVisualStyleBackColor = true;
             this.But_customize.Click += new System.EventHandler(this.But_customize_Click);
+            // 
+            // But_Auto
+            // 
+            this.But_Auto.Font = new System.Drawing.Font("微软雅黑", 10F);
+            this.But_Auto.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.But_Auto.Location = new System.Drawing.Point(155, 120);
+            this.But_Auto.Name = "But_Auto";
+            this.But_Auto.Size = new System.Drawing.Size(137, 48);
+            this.But_Auto.TabIndex = 3;
+            this.But_Auto.Text = "句子自动换行";
+            this.But_Auto.UseVisualStyleBackColor = true;
+            this.But_Auto.Click += new System.EventHandler(this.But_Auto_Click);
             // 
             // Config
             // 
@@ -136,6 +149,7 @@
             this.Controls.Add(this.But_customize);
             this.Controls.Add(this.But_OneSentence);
             this.Controls.Add(this.But_BColor);
+            this.Controls.Add(this.But_Auto);
             this.Controls.Add(this.But_Color);
             this.Controls.Add(this.But_Style);
             this.Controls.Add(this.But_Position);
@@ -164,5 +178,6 @@
         private System.Windows.Forms.FontDialog Fd_Style;
         private System.Windows.Forms.ColorDialog Cd_Color;
         private System.Windows.Forms.ToolTip Tt_toolTip;
+        private System.Windows.Forms.Button But_Auto;
     }
 }

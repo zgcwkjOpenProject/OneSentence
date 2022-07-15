@@ -124,12 +124,12 @@
         #endregion
 
         public System.Windows.Forms.Label Txt_hitokoto;
-        private System.Windows.Forms.ToolTip Tt_toolTip;
         private System.Windows.Forms.NotifyIcon NF_ico;
         private System.Windows.Forms.ContextMenuStrip Cms_Menu;
         private System.Windows.Forms.ToolStripMenuItem Tsm_Config;
         private System.Windows.Forms.ToolStripMenuItem Tsm_Close;
         private System.Windows.Forms.Timer Timer_Refresh;
+        public System.Windows.Forms.ToolTip Tt_toolTip;
     }
 }
 

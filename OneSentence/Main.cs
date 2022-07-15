@@ -72,6 +72,14 @@ namespace OneSentence
                             Timer_Refresh.Enabled = true;
                         }
                     }
+                    if (ConfigS[7].Contains("字体样式"))
+                    {
+                        string Config = ConfigS[7].Replace("字体样式=", "");
+                        //字体样式
+                        Txt_hitokoto.Font = new System.Drawing.Font(Convert.ToString(Config.Split('|')[0]), (float)Convert.ToDecimal(Config.Split('|')[1]), System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 134);
+                        //字体颜色
+                        Txt_hitokoto.ForeColor = System.Drawing.Color.FromArgb(Convert.ToInt32(Config.Split('|')[2].Split(',')[0]), Convert.ToInt32(Config.Split('|')[2].Split(',')[1]), Convert.ToInt32(Config.Split('|')[2].Split(',')[2]));
+                    }
                 }
             }
             catch (Exception ex)
@@ -95,8 +103,10 @@ namespace OneSentence
             Config += "\r\n" + "窗体位置=" + this.Location.X + "," + this.Location.Y;
             Config += "\r\n" + "窗体大小=" + this.Width + "," + this.Height;
             Config += "\r\n" + "字符长度=" + Txt_hitokoto.Tag;
-            Config += "\r\n" + "自动换行=" + Tt_toolTip.Tag;
-            Config += "\r\n" + "定时更换="+ Timer_Refresh.Interval;
+            Config += "\r\n" + "自动换行=" + Txt_hitokoto.AutoSize;
+            Config += "\r\n" + "定时更换=" + Timer_Refresh.Interval;
+            Config += "\r\n" + "字体样式=" + Txt_hitokoto.Font.Name + "|" + Txt_hitokoto.Font.Size + "|" + Txt_hitokoto.ForeColor.R + "," + Txt_hitokoto.ForeColor.G + "," + Txt_hitokoto.ForeColor.B;
+
             File.WriteAllText("Config.ini", Config, Encoding.UTF8);
 
             #endregion 载出配置
@@ -168,6 +178,7 @@ namespace OneSentence
                 //==》调整窗体的参数，保持能显示完整和居中效果
                 int thisWidth = this.Width;
                 this.Width = OneSentence.Length * 37;//37大约为每个字体的宽度
+                this.Height = 75;//还原默认高度
                 //this.Location = new Point(this.Location.X + thisWidth / 2 - this.Width / 2, this.Location.Y);
                 //==》调整窗体的参数，保持能显示完整和居中效果
             }

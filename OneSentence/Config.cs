@@ -80,6 +80,14 @@ namespace OneSentence
         }
 
         /// <summary>
+        /// 句子自动换行
+        /// </summary>
+        private void But_Auto_Click(object sender, EventArgs e)
+        {
+            main.Txt_hitokoto.AutoSize = !main.Txt_hitokoto.AutoSize;
+        }
+
+        /// <summary>
         /// 立刻获取 一言
         /// </summary>
         private void But_OneSentence_Click(object sender, EventArgs e)
