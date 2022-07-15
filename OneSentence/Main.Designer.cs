@@ -36,11 +36,15 @@
             this.Cms_Menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Tsm_Config = new System.Windows.Forms.ToolStripMenuItem();
             this.Tsm_Close = new System.Windows.Forms.ToolStripMenuItem();
+            this.Timer_Refresh = new System.Windows.Forms.Timer(this.components);
             this.Cms_Menu.SuspendLayout();
             this.SuspendLayout();
             // 
             // Txt_hitokoto
             // 
+            this.Txt_hitokoto.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.Txt_hitokoto.AutoSize = true;
             this.Txt_hitokoto.Font = new System.Drawing.Font("微软雅黑 Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Txt_hitokoto.Location = new System.Drawing.Point(13, 17);
@@ -48,8 +52,13 @@
             this.Txt_hitokoto.Size = new System.Drawing.Size(146, 41);
             this.Txt_hitokoto.TabIndex = 0;
             this.Txt_hitokoto.Text = "测试文本";
-            this.Tt_toolTip.SetToolTip(this.Txt_hitokoto, "单击复制这段文字");
+            this.Tt_toolTip.SetToolTip(this.Txt_hitokoto, "单击复制这段文字\r\n双击更换一段文字");
             this.Txt_hitokoto.Click += new System.EventHandler(this.Txt_hitokoto_Click);
+            this.Txt_hitokoto.DoubleClick += new System.EventHandler(this.Txt_hitokoto_DoubleClick);
+            // 
+            // Tt_toolTip
+            // 
+            this.Tt_toolTip.Tag = "True";
             // 
             // NF_ico
             // 
@@ -80,6 +89,11 @@
             this.Tsm_Close.Text = "退出程序";
             this.Tsm_Close.Click += new System.EventHandler(this.Tsm_Close_Click);
             // 
+            // Timer_Refresh
+            // 
+            this.Timer_Refresh.Interval = 500;
+            this.Timer_Refresh.Tick += new System.EventHandler(this.Timer_Refresh_Tick);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -96,6 +110,7 @@
             this.Name = "Main";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Tag = "https://v1.hitokoto.cn/?encode=text";
             this.Text = "一言";
             this.TransparencyKey = System.Drawing.Color.Gray;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
@@ -114,6 +129,7 @@
         private System.Windows.Forms.ContextMenuStrip Cms_Menu;
         private System.Windows.Forms.ToolStripMenuItem Tsm_Config;
         private System.Windows.Forms.ToolStripMenuItem Tsm_Close;
+        private System.Windows.Forms.Timer Timer_Refresh;
     }
 }
 

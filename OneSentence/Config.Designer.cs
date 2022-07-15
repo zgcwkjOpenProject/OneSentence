@@ -37,7 +37,6 @@
             this.But_BColor = new System.Windows.Forms.Button();
             this.But_OneSentence = new System.Windows.Forms.Button();
             this.But_customize = new System.Windows.Forms.Button();
-            this.But_Auto = new System.Windows.Forms.Button();
             this.Fd_Style = new System.Windows.Forms.FontDialog();
             this.Cd_Color = new System.Windows.Forms.ColorDialog();
             this.Tt_toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -107,7 +106,7 @@
             // 
             this.But_OneSentence.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.But_OneSentence.ForeColor = System.Drawing.Color.Blue;
-            this.But_OneSentence.Location = new System.Drawing.Point(155, 120);
+            this.But_OneSentence.Location = new System.Drawing.Point(12, 174);
             this.But_OneSentence.Name = "But_OneSentence";
             this.But_OneSentence.Size = new System.Drawing.Size(137, 48);
             this.But_OneSentence.TabIndex = 5;
@@ -120,7 +119,7 @@
             // 
             this.But_customize.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.But_customize.ForeColor = System.Drawing.Color.Blue;
-            this.But_customize.Location = new System.Drawing.Point(12, 174);
+            this.But_customize.Location = new System.Drawing.Point(155, 174);
             this.But_customize.Name = "But_customize";
             this.But_customize.Size = new System.Drawing.Size(137, 48);
             this.But_customize.TabIndex = 6;
@@ -129,25 +128,11 @@
             this.But_customize.UseVisualStyleBackColor = true;
             this.But_customize.Click += new System.EventHandler(this.But_customize_Click);
             // 
-            // But_Auto
-            // 
-            this.But_Auto.Enabled = false;
-            this.But_Auto.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.But_Auto.ForeColor = System.Drawing.Color.Blue;
-            this.But_Auto.Location = new System.Drawing.Point(155, 174);
-            this.But_Auto.Name = "But_Auto";
-            this.But_Auto.Size = new System.Drawing.Size(137, 48);
-            this.But_Auto.TabIndex = 7;
-            this.But_Auto.Text = "定时更换 一言";
-            this.Tt_toolTip.SetToolTip(this.But_Auto, "定时自动更换一言");
-            this.But_Auto.UseVisualStyleBackColor = true;
-            // 
             // Config
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(304, 236);
-            this.Controls.Add(this.But_Auto);
             this.Controls.Add(this.But_customize);
             this.Controls.Add(this.But_OneSentence);
             this.Controls.Add(this.But_BColor);
@@ -176,7 +161,6 @@
         private System.Windows.Forms.Button But_BColor;
         private System.Windows.Forms.Button But_OneSentence;
         private System.Windows.Forms.Button But_customize;
-        private System.Windows.Forms.Button But_Auto;
         private System.Windows.Forms.FontDialog Fd_Style;
         private System.Windows.Forms.ColorDialog Cd_Color;
         private System.Windows.Forms.ToolTip Tt_toolTip;
